@@ -18,6 +18,6 @@ io.on('connection', function (socket) {
     });
     socket.on('clear',function(){
       line_history = [];
-      io.emit('refresh');
+      socket.broadcast.emit('clear');
     });
 });
