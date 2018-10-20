@@ -2,10 +2,9 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="jscolor.js"></script>
 
     <style>
         body {
@@ -61,6 +60,7 @@
 var socket = io.connect('http://hackboard.us.openode.io');
 var c=document.getElementById("myCanvas");
 var ctx=c.getContext("2d");
+var id = getUrlParameter('id');
 
 set_size();
 jQuery(document).ready(function($){
@@ -125,6 +125,7 @@ function set_size(){
   c.height = window.innerHeight;
 }
 function Draw(data, draw) {
+    if(data.id == id){
       ctx.beginPath();
       ctx.lineWidth = parseInt(data.lineWidth);
       ctx.strokeStyle = data.color;
@@ -133,6 +134,7 @@ function Draw(data, draw) {
       ctx.lineTo(data.points.xf, data.points.yf);
       ctx.closePath();
       ctx.stroke();
+      }
       if(draw){
         var aux = document.getElementById("myCanvas");
         var w = c.width;
@@ -144,6 +146,7 @@ function Draw(data, draw) {
           yf: data.points.yf / h,
         }
         var datos = {
+          id: id,
           points: points,
           lineWidth: $('#setlinewidth').val(),
           color: $('#colorPicker').val()
@@ -152,21 +155,38 @@ function Draw(data, draw) {
       }
 }
 function Clean(){
-  socket.emit('clear');
+  socket.emit('clear',{id: id});
   location.reload();
 }
-socket.on('clear',function(){
-  location.reload();
+socket.on('clear',function(data){
+  if(data.id == id) location.reload();
 });
 socket.on('refresh',function(data){
-  var w = c.width;
-  var h = c.height;
-  data.points.xi *= w;
-  data.points.yi *= h;
-  data.points.xf *= w;
-  data.points.yf *= h;
-  Draw(data,false);
-})
+  if(data.id == id){
+    var w = c.width;
+    var h = c.height;
+    data.points.xi *= w;
+    data.points.yi *= h;
+    data.points.xf *= w;
+    data.points.yf *= h;
+    Draw(data,false);
+  }
+});
+
+ function getUrlParameter(sParam) {
+    var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+        sURLVariables = sPageURL.split('&'),
+        sParameterName,
+        i;
+
+    for (i = 0; i < sURLVariables.length; i++) {
+        sParameterName = sURLVariables[i].split('=');
+
+        if (sParameterName[0] === sParam) {
+            return sParameterName[1] === undefined ? true : sParameterName[1];
+        }
+    }
+};
 
 </script>
 
