@@ -35,7 +35,7 @@ jQuery(document).ready(function($){
   });
   $('canvas').on('mousemove', function(e){
     if(click){
-      Draw(inix,iniy,e.pageX,e.pageY);
+      Draw(inix,iniy,e.pageX,e.pageY,true);
       inix = e.pageX;
       iniy = e.pageY;
     }
@@ -50,7 +50,7 @@ function set_size(){
   c.width = parseInt(paint_style.getPropertyValue('width'));
   c.height = parseInt(paint_style.getPropertyValue('height'));
 }
-function Draw(xi, yi, xf, yf) {
+function Draw(xi, yi, xf, yf, draw) {
       ctx.beginPath();
       ctx.lineWidth = 10;
       ctx.lineJoin = "round";
@@ -58,21 +58,23 @@ function Draw(xi, yi, xf, yf) {
       ctx.lineTo(xf, yf);
       ctx.closePath();
       ctx.stroke();
-      var aux = document.getElementById("myCanvas");
-      var w = c.width;
-      var h = c.height;
-      var points = {
-        xi: xi / w,
-        yi: yi / h,
-        xf: xf / w,
-        yf: yf / h,
+      if(draw){
+        var aux = document.getElementById("myCanvas");
+        var w = c.width;
+        var h = c.height;
+        var points = {
+          xi: xi / w,
+          yi: yi / h,
+          xf: xf / w,
+          yf: yf / h,
+        }
+        socket.emit('update',points);
       }
-      socket.emit('update',points);
 }
 socket.on('refresh',function(data){
   var w = c.width;
   var h = c.height;
-  Draw(data.xi*w,data.yi*h,data.xf*w,data.yf*h);
+  Draw(data.xi*w,data.yi*h,data.xf*w,data.yf*h,false);
 })
 
 </script>

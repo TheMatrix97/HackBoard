@@ -11,7 +11,6 @@ var line_history = [];
 io.on('connection', function (socket) {
     socket.on('update',function(data){
       line_history.push(data);
-      console.log("update");
       socket.broadcast.emit('refresh',data);
     });
 });
