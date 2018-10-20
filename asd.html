@@ -2,6 +2,13 @@
 <!DOCTYPE HTML>
 <html>
 <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <style>
         body {
             margin: 0px;
@@ -10,13 +17,20 @@
     </style>
 </head>
 <body>
-<div id="paint">
-    <canvas id="myCanvas" width="800" height="800"></canvas>
+<div class="row">
+    <div class="col-xl-" id="paint">
+        <canvas id="myCanvas" width="800" height="800"></canvas>
+    </div>
+      <div class="col-xs-" id="slider">
+        <input type="range" min="1" max="100" value="50" class="slider" id="myRange">
+    </div>
 </div>
+
 <script
     src="https://code.jquery.com/jquery-3.3.1.js"
     integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
     crossorigin="anonymous"></script>
+
 <script>
 var c=document.getElementById("myCanvas");
 var ctx=c.getContext("2d");
@@ -45,6 +59,7 @@ jQuery(document).ready(function($){
 function set_size(){
   var painting = document.getElementById('paint');
   var paint_style = getComputedStyle(painting);
+  c.width = myCanvas.width;
   c.width = parseInt(paint_style.getPropertyValue('width'));
   c.height = parseInt(paint_style.getPropertyValue('height'));
 }
