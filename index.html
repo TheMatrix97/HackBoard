@@ -21,9 +21,10 @@
     </div>
     <div class="col-lg-3">
         <input type="range" min="1" max="25" value="10" class="slider" id="setlinewidth">
-        <button class="btn btn-primary" id="btn">CLEAR ALL</button>
+        <button class="btn btn-primary" id="btn"><span class="glyphicon glyphicon-trash"></span></button>
         <input id="colorPicker" type="color" value="#FF0000">
-        <button class="btn btn-primary" id="Eraser">ERASE</button>
+        <button class="btn btn-primary" id="Eraser"><span class="glyphicon glyphicon-erase"></span></button>
+        <button class="btn btn-primary" id="Painter"><span class="glyphicon glyphicon-pencil"></span></button>
     </div>
 </div>
 <style>
@@ -67,6 +68,7 @@ jQuery(document).ready(function($){
   var click = false;
   var inix;
   var iniy;
+  var erase = false;
 
   $('canvas').on('mousedown',function(e){
     click = true;
@@ -81,11 +83,23 @@ jQuery(document).ready(function($){
         xf: e.pageX,
         yf: e.pageY
       };
-      var datos = {
-        points: points,
-        lineWidth: $('#setlinewidth').val(),
-        color: $('#colorPicker').val()
-      };
+      var datos;
+      if(!erase){
+        datos = {
+            points: points,
+            lineWidth: $('#setlinewidth').val(),
+            color: $('#colorPicker').val()
+        };
+      }
+       else {
+        datos = {
+            points: points,
+            lineWidth: $('#setlinewidth').val(),
+            color: "#FFFFFF"
+        };
+
+       }
+
       Draw(datos,true);
       inix = e.pageX;
       iniy = e.pageY;
@@ -98,8 +112,10 @@ jQuery(document).ready(function($){
     Clean();
   });
   $('#Eraser').on('click', function(){
-   $('#colorPicker').val("#FFFFFF"); 
-
+   erase = true;
+  });
+  $('#Painter').on('click', function(){
+   erase = false;
   });
 });
 function set_size(){
