@@ -2,17 +2,40 @@
 <!DOCTYPE HTML>
 <html>
 <head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <style>
         body {
-            margin: 0px;
+            margin: 5px;
             padding: 0px;
         }
     </style>
 </head>
 <body>
-<div id="paint">
-    <canvas id="myCanvas" width="800" height="800"></canvas>
+<div id="paint" class="row">
+    <div id="canvasDiv" class="col-lg-9">
+        <canvas id="myCanvas" width="700" height="800" style="border:2px solid #000000"></canvas>
+    </div>
+    <div class="col-lg-3">
+        <input type="range" min="1" max="25" value="10" class="slider" id="setLineWidth">
+    </div>
 </div>
+<style>
+    .slider{
+        -webkit-appearance: none;
+        width: 50%;
+        height: 25px;
+        background: #000000;
+        outline: none;
+        opacity: 0.7;
+        -webkit-transition: .2s;
+        transition: opacity .2s;
+    }
+    canvas{
+        display: block;
+    }
+</style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
 <script
     src="https://code.jquery.com/jquery-3.3.1.js"
@@ -22,12 +45,17 @@
 var socket = io.connect('http://hackboard.us.openode.io');
 var c=document.getElementById("myCanvas");
 var ctx=c.getContext("2d");
+
 set_size();
 jQuery(document).ready(function($){
   var paint = $('#paint')
   var click = false;
   var inix;
   var iniy;
+  $('input').on('change', function(e){
+      ctx.lineWidth = this.value;
+      //console.log(this.value);
+  });
   $('canvas').on('mousedown',function(e){
     click = true;
     inix = e.pageX;
@@ -47,12 +75,12 @@ jQuery(document).ready(function($){
 function set_size(){
   var painting = document.getElementById('paint');
   var paint_style = getComputedStyle(painting);
-  c.width = parseInt(paint_style.getPropertyValue('width'));
-  c.height = parseInt(paint_style.getPropertyValue('height'));
+  c.width = jQuery('#canvasDiv').width();
+  c.height = window.innerHeight;
 }
 function Draw(xi, yi, xf, yf, draw) {
       ctx.beginPath();
-      ctx.lineWidth = 10;
+      //ctx.lineWidth = 10;
       ctx.lineJoin = "round";
       ctx.moveTo(xi, yi);
       ctx.lineTo(xf, yf);
