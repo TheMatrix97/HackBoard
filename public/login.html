@@ -1,0 +1,31 @@
+
+<link rel="stylesheet" type="text/css" href="/css/login.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<!------ Include the above in your HEAD tag ---------->
+
+<body>
+<div class="container login-container">
+            <div class="row">
+                <div class="col-md-8 login-form-1">
+                    <h3>Join a channel</h3>
+                    <form>
+                        <div class="form-group">
+                            <input id="idjoin" type="number" class="form-control" placeholder="Channel ID" value="" />
+                        </div>
+                        <div class="form-group">
+                            <input id="loginb" class="btnSubmit" value="Login" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+  </div>
+</body>
+      <script>
+        jQuery(document).ready(function($){
+          $('#loginb').on('click', function(){
+            window.location.href = "/join/?id="+$('#idjoin').val();
+          });
+      });
+      </script>
