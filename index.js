@@ -4,16 +4,13 @@ var server = require('http').Server(app);
 var io = require('socket.io')(server);
 server.listen(80);
 app.get('/', function (req, res) {
-  res.sendFile(__dirname + '/login.html');
+  res.sendFile(__dirname + '/public/login.html');
 });
 app.use(express.static(__dirname + '/public'));
-app.get('/create',function(req, res){
+app.get('/join',function(req, res){
   var id = req.query.id;
   res.redirect("/index.html?id="+id);
 
-});
-app.get('/login', function(req, res){
-  res.send("login");
 });
 var line_history = [];
 
