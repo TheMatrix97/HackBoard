@@ -1,10 +1,18 @@
-var app = require('express')();
+var express = require('express');
+var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 
 server.listen(80);
 app.get('/', function (req, res) {
-  res.sendFile(__dirname + '/index.html');
+  res.sendFile(__dirname + '/login.html');
+});
+app.use(express.static(__dirname + '/public'));
+app.get('/create',function(req, res){
+  res.send("create");
+});
+app.get('/login', function(req, res){
+  res.send("login");
 });
 var line_history = [];
 
