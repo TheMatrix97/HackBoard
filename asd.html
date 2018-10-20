@@ -13,42 +13,50 @@
 <div id="paint">
     <canvas id="myCanvas" width="800" height="800"></canvas>
 </div>
+<script
+    src="https://code.jquery.com/jquery-3.3.1.js"
+    integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+    crossorigin="anonymous"></script>
 <script>
-    var canvas = document.getElementById('myCanvas');
-    var ctx = canvas.getContext('2d');
-
-    var painting = document.getElementById('paint');
-    var paint_style = getComputedStyle(painting);
-    canvas.width = parseInt(paint_style.getPropertyValue('width'));
-    canvas.height = parseInt(paint_style.getPropertyValue('height'));
-
-    var mouse = {x: 0, y: 0};
-
-    canvas.addEventListener('mousemove', function(e) {
-        mouse.x = e.pageX - this.offsetLeft;
-        mouse.y = e.pageY - this.offsetTop;
-    }, false);
-
-    ctx.lineWidth = 3;
-    ctx.lineJoin = 'round';
-    ctx.lineCap = 'round';
-    ctx.strokeStyle = '#00CC99';
-
-    canvas.addEventListener('mousedown', function(e) {
-        ctx.beginPath();
-        ctx.moveTo(mouse.x, mouse.y);
-
-        canvas.addEventListener('mousemove', onPaint, false);
-    }, false);
-
-    canvas.addEventListener('mouseup', function() {
-        canvas.removeEventListener('mousemove', onPaint, false);
-    }, false);
-
-    var onPaint = function() {
-        ctx.lineTo(mouse.x, mouse.y);
-        ctx.stroke();
-    };
+var c=document.getElementById("myCanvas");
+var ctx=c.getContext("2d");
+set_size();
+jQuery(document).ready(function($){
+  var paint = $('#paint')
+  var click = false;
+  var inix;
+  var iniy;
+  $('canvas').on('mousedown',function(e){
+    click = true;
+    inix = e.pageX;
+    iniy = e.pageY;
+  });
+  $('canvas').on('mousemove', function(e){
+    if(click){
+      Draw(inix,iniy,e.pageX,e.pageY);
+      inix = e.pageX;
+      iniy = e.pageY;
+    }
+  });
+  $('canvas').on('mouseup', function(){
+    click = false;
+  });
+});
+function set_size(){
+  var painting = document.getElementById('paint');
+  var paint_style = getComputedStyle(painting);
+  c.width = parseInt(paint_style.getPropertyValue('width'));
+  c.height = parseInt(paint_style.getPropertyValue('height'));
+}
+function Draw(xi, yi, xf, yf) {
+      ctx.beginPath();
+      ctx.lineWidth = 10;
+      ctx.lineJoin = "round";
+      ctx.moveTo(xi, yi);
+      ctx.lineTo(xf, yf);
+      ctx.closePath();
+      ctx.stroke();
+}
 
 </script>
 </body>
