@@ -151,7 +151,7 @@ function Draw(data, draw) {
           id: id,
           points: points,
           lineWidth: $('#setlinewidth').val(),
-          color: $('#colorPicker').val()
+          color: data.color
         }
         socket.emit('update',datos);
       }
