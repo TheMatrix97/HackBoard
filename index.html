@@ -19,7 +19,7 @@
     integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
     crossorigin="anonymous"></script>
 <script>
-var socket = io.connect('http://localhost');
+var socket = io.connect('http://hackboard.us.openode.io');
 var c=document.getElementById("myCanvas");
 var ctx=c.getContext("2d");
 set_size();
@@ -70,6 +70,9 @@ function Draw(xi, yi, xf, yf, draw) {
         }
         socket.emit('update',points);
       }
+}
+function Clean(){
+  socket.emit('clear');
 }
 socket.on('refresh',function(data){
   var w = c.width;
