@@ -5,6 +5,8 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="jscolor.js"></script>
+
     <style>
         body {
             margin: 5px;
@@ -20,13 +22,14 @@
     <div class="col-lg-3">
         <input type="range" min="1" max="25" value="10" class="slider" id="setlinewidth">
         <button class="btn btn-primary" id="btn">CLEAR ALL</button>
+        <input id="colorPicker" type="color" value="#FF0000">
     </div>
 </div>
 <style>
     .slider{
         -webkit-appearance: none;
         width: 50%;
-        height: 25px;
+        height: 35px;
         border-radius: 8px;
         background: #000000;
         outline: none;
@@ -37,8 +40,8 @@
     .slider::-webkit-slider-thumb {
         -webkit-appearance: none;
         appearance: none;
-        width: 25px;
-        height: 25px;
+        width: 35px;
+        height: 40px;
         border-radius: 50%;
         background: #4CAF50;
         cursor: pointer;
