@@ -11,6 +11,12 @@
             margin: 5px;
             padding: 0px;
         }
+        .btn{
+          width: 100%
+        }
+        label{
+          font-size: 20px;
+        }
     </style>
 </head>
 <body>
@@ -18,13 +24,29 @@
     <div id="canvasDiv" class="col-lg-9">
         <canvas id="myCanvas" width="700" height="800" style="border:2px solid #000000"></canvas>
     </div>
-    <div class="mt-10 col-lg-3">
+    <div class="col-lg-3">
+      <form>
+        <div class="form-group">
+          <label for="setlinewidth">Line width</label>
+          <input type="number" value="10" min="1" max="25" id="setlinewidth">
+        </div>
+        <label>Tools</label>
+        <div class="form-group row">
+          <div class="col-lg-3">
+            <button class="btn btn-primary" id="btn"><span class="glyphicon glyphicon-trash"></span></button>
+          </div>
+          <div class="col-lg-3">
+            <button class="btn btn-info" id="Eraser"><span class="glyphicon glyphicon-erase"></span></button>
+          </div>
+          <div class="col-lg-3">
+          <button class="btn btn-info" id="Painter"><span class="glyphicon glyphicon-pencil"></span></button>
+        </div>
+        <div class="col-lg-3">
+          <input id="colorPicker" type="color" value="#FF0000">
+        </div>
+        </div>
+      </form>
         <!--<input type="range" min="1" max="25" value="10" class="slider" id="setlinewidth"> -->
-        <input type="number" value="10" min="1" max="25" id="setlinewidth">
-        <button class="btn btn-primary" id="btn"><span class="glyphicon glyphicon-trash"></span></button>
-        <button class="btn btn-info" id="Eraser"><span class="glyphicon glyphicon-erase"></span></button>
-        <button class="btn btn-info" id="Painter"><span class="glyphicon glyphicon-pencil"></span></button>
-        <input id="colorPicker" type="color" value="#FF0000">
     </div>
 </div>
 <style>
