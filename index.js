@@ -25,9 +25,13 @@ io.on('connection', function (socket) {
       line_history.push(data);
       socket.broadcast.emit('refresh',data);
     });
-    socket.on('clear',function(){
-      line_history = [];
-      socket.broadcast.emit('clear');
+    socket.on('clear',function(data){
+      var aux = [];
+      line_history.forEach(function(a){
+        if(a.id == data.id) aux.push(a);
+      });
+      line_history = aux;
+      socket.broadcast.emit('clear',data.id);
     });
 });
 function create_sala(req){
