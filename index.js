@@ -2,14 +2,15 @@ var express = require('express');
 var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
-
 server.listen(80);
 app.get('/', function (req, res) {
   res.sendFile(__dirname + '/login.html');
 });
 app.use(express.static(__dirname + '/public'));
 app.get('/create',function(req, res){
-  res.send("create");
+  var id = req.query.id;
+  res.redirect("/index.html?id="+id);
+
 });
 app.get('/login', function(req, res){
   res.send("login");
@@ -29,3 +30,10 @@ io.on('connection', function (socket) {
       socket.broadcast.emit('clear');
     });
 });
+function create_sala(req){
+  var id = Math.floor((Math.random() * 999) + 1);
+  if(salas.includes(id)) create_sala();
+  else{
+
+  }
+}

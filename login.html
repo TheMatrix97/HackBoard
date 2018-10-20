@@ -12,10 +12,10 @@
                     <h3>Create a channel</h3>
                     <form>
                         <div class="form-group">
-                            <input type="password" class="form-control" placeholder="Password" value="" />
+                            <input id="idcreate" type="text" class="form-control" placeholder="ID" value="" />
                         </div>
                         <div class="form-group">
-                            <input id="loginc" type="submit" class="btnSubmit" value="Create" />
+                            <input id="loginc" class="btn btn-primary" value="Create" />
                         </div>
                     </form>
                 </div>
@@ -23,13 +23,10 @@
                     <h3>Join a channel</h3>
                     <form>
                         <div class="form-group">
-                            <input type="text" class="form-control" placeholder="Channel ID" value="" />
+                            <input id="idjoin" type="text" class="form-control" placeholder="Channel ID" value="" />
                         </div>
                         <div class="form-group">
-                            <input type="password" class="form-control" placeholder="Password" value="" />
-                        </div>
-                        <div class="form-group">
-                            <input id="loginb" type="submit" class="btnSubmit" value="Login" />
+                            <input id="loginb" class="btn btn-primary" value="Login" />
                         </div>
                     </form>
                 </div>
@@ -38,11 +35,12 @@
       </body>
       <script>
         jQuery(document).ready(function($){
-          $('#loginb').on('click',function(){
+          $('#loginb').on('click', function(){
             window.location.href = "/login";
           });
-          $('#loginc').on('click',function(){
-            window.location.href = "/create";
-          })
-        });
+          $('#loginc').on('click', function(){
+            console.log("hola");
+            window.location.href = "/create/?id="+$('#idcreate').val();
+          });
+      });
       </script>
