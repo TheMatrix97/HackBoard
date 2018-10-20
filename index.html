@@ -23,6 +23,7 @@
         <input type="range" min="1" max="25" value="10" class="slider" id="setlinewidth">
         <button class="btn btn-primary" id="btn">CLEAR ALL</button>
         <input id="colorPicker" type="color" value="#FF0000">
+        <button class="btn btn-primary" id="Eraser">ERASE</button>
     </div>
 </div>
 <style>
@@ -95,6 +96,10 @@ jQuery(document).ready(function($){
   });
   $('#btn').on('click', function(){
     Clean();
+  });
+  $('#Eraser').on('click', function(){
+   $('#colorPicker').val("#FFFFFF"); 
+
   });
 });
 function set_size(){
