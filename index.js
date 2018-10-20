@@ -9,6 +9,9 @@ app.get('/', function (req, res) {
 var line_history = [];
 
 io.on('connection', function (socket) {
+  line_history.forEach(function(coord){
+    socket.emit('refresh',coord );
+  });
     socket.on('update',function(data){
       line_history.push(data);
       socket.broadcast.emit('refresh',data);
