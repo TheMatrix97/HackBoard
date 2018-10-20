@@ -1,0 +1,230 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <style>
+        body {
+            margin: 5px;
+            padding: 0px;
+        }
+        .btn{
+          width: 100%
+        }
+        label{
+          font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+<div id="paint" class="row">
+    <div id="canvasDiv" class="col-lg-9">
+        <canvas id="myCanvas" width="700" height="800" style="border:2px solid #000000"></canvas>
+    </div>
+    <div class="col-lg-3">
+      <form>
+        <div class="form-group">
+          <label for="setlinewidth">Line width</label>
+          <input type="number" value="10" min="1" max="25" id="setlinewidth">
+        </div>
+        <label>Tools</label>
+        <div class="form-group row">
+          <div class="col-lg-3">
+            <button class="btn btn-primary" id="btn"><span class="glyphicon glyphicon-trash"></span></button>
+          </div>
+          <div class="col-lg-3">
+            <button class="btn btn-info" id="Eraser"><span class="glyphicon glyphicon-erase"></span></button>
+          </div>
+          <div class="col-lg-3">
+          <button class="btn btn-info" id="Painter"><span class="glyphicon glyphicon-pencil"></span></button>
+        </div>
+        <div class="col-lg-3">
+          <input id="colorPicker" type="color" value="#FF0000">
+        </div>
+        </div>
+      </form>
+        <!--<input type="range" min="1" max="25" value="10" class="slider" id="setlinewidth"> -->
+    </div>
+</div>
+<style>
+    .slider{
+        -webkit-appearance: none;
+        width: 50%;
+        height: 25px;
+        border-radius: 8px;
+        background: #000000;
+        outline: none;
+        opacity: 0.7;
+        -webkit-transition: .2s;
+        transition: opacity .2s;
+    }
+    .slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        background: #0576B5;
+        cursor: pointer;
+    }
+    input[type=color]{
+    border: 2px solid #0576B5;
+    }
+    input[type=number]{
+     width: 100%;
+     border: 3px solid #0576B5;
+    }
+    canvas{
+        display: block;
+    }
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
+<script
+    src="https://code.jquery.com/jquery-3.3.1.js"
+    integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+    crossorigin="anonymous"></script>
+<script>
+var socket = io.connect('http://hackboard.us.openode.io');
+var c=document.getElementById("myCanvas");
+var ctx=c.getContext("2d");
+var id = getUrlParameter('id');
+
+set_size();
+jQuery(document).ready(function($){
+  var paint = $('#paint')
+  var click = false;
+  var inix;
+  var iniy;
+  var erase = false;
+
+  $('canvas').on('mousedown',function(e){
+    click = true;
+    inix = e.pageX;
+    iniy = e.pageY;
+  });
+  $('canvas').on('mousemove', function(e){
+    if(click){
+      var points = {
+        xi: inix,
+        yi: iniy,
+        xf: e.pageX,
+        yf: e.pageY
+      };
+      var datos;
+      if(!erase){
+        datos = {
+            id: id,
+            points: points,
+            lineWidth: $('#setlinewidth').val(),
+            color: $('#colorPicker').val()
+        };
+      }
+       else {
+        datos = {
+            id: id,
+            points: points,
+            lineWidth: $('#setlinewidth').val(),
+            color: "#FFFFFF"
+        };
+
+       }
+
+      Draw(datos,true);
+      inix = e.pageX;
+      iniy = e.pageY;
+    }
+  });
+  $('canvas').on('mouseup', function(){
+    click = false;
+  });
+  $('#btn').on('click', function(){
+    Clean();
+  });
+  $('#Eraser').on('click', function(){
+    $('#Eraser').addClass("btn btn-info active");
+    $('#Painter').addClass("btn btn-info");
+   erase = true;
+  });
+  $('#Painter').on('click', function(){
+    $('#Eraser').addClass("btn btn-info");
+    $('#Painter').addClass("btn btn-info active");
+    erase = false;
+  });
+});
+function set_size(){
+  var painting = document.getElementById('paint');
+  var paint_style = getComputedStyle(painting);
+  c.width = jQuery('#canvasDiv').width();
+  c.height = window.innerHeight;
+}
+function Draw(data, draw) {
+    if(data.id == id){
+      ctx.beginPath();
+      ctx.lineWidth = parseInt(data.lineWidth);
+      ctx.strokeStyle = data.color;
+      ctx.lineJoin = "round";
+      ctx.moveTo(data.points.xi, data.points.yi);
+      ctx.lineTo(data.points.xf, data.points.yf);
+      ctx.closePath();
+      ctx.stroke();
+      }
+      if(draw){
+        var aux = document.getElementById("myCanvas");
+        var w = c.width;
+        var h = c.height;
+        var points = {
+          xi: data.points.xi / w,
+          yi: data.points.yi / h,
+          xf: data.points.xf / w,
+          yf: data.points.yf / h,
+        }
+        var datos = {
+          id: id,
+          points: points,
+          lineWidth: $('#setlinewidth').val(),
+          color: data.color
+        }
+        socket.emit('update',datos);
+      }
+}
+function Clean(){
+  socket.emit('clear',id);
+  location.reload();
+}
+socket.on('clear',function(data){
+  if(data == id) location.reload();
+});
+socket.on('refresh',function(data){
+  if(data.id == id){
+    var w = c.width;
+    var h = c.height;
+    data.points.xi *= w;
+    data.points.yi *= h;
+    data.points.xf *= w;
+    data.points.yf *= h;
+    Draw(data,false);
+  }
+});
+
+ function getUrlParameter(sParam) {
+    var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+        sURLVariables = sPageURL.split('&'),
+        sParameterName,
+        i;
+
+    for (i = 0; i < sURLVariables.length; i++) {
+        sParameterName = sURLVariables[i].split('=');
+
+        if (sParameterName[0] === sParam) {
+            return sParameterName[1] === undefined ? true : sParameterName[1];
+        }
+    }
+};
+
+</script>
+
+</body>
+</html>
