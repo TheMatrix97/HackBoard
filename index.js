@@ -4,7 +4,7 @@ var io = require('socket.io')(server);
 
 server.listen(80);
 app.get('/', function (req, res) {
-  res.sendFile(__dirname + '/asd.html');
+  res.sendFile(__dirname + '/index.html');
 });
 var line_history = [];
 
