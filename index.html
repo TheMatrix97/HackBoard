@@ -32,6 +32,9 @@
         -webkit-transition: .2s;
         transition: opacity .2s;
     }
+    canvas{
+        display: block;
+    }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
 <script
@@ -73,7 +76,7 @@ function set_size(){
   var painting = document.getElementById('paint');
   var paint_style = getComputedStyle(painting);
   c.width = jQuery('#canvasDiv').width();
-  c.height = jQuery('#canvasDiv').height();
+  c.height = window.innerHeight;
 }
 function Draw(xi, yi, xf, yf, draw) {
       ctx.beginPath();
