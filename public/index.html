@@ -94,7 +94,7 @@ jQuery(document).ready(function($){
       }
        else {
         datos = {
-            id: id, 
+            id: id,
             points: points,
             lineWidth: $('#setlinewidth').val(),
             color: "#FFFFFF"
@@ -157,11 +157,11 @@ function Draw(data, draw) {
       }
 }
 function Clean(){
-  socket.emit('clear',{id: id});
+  socket.emit('clear',id);
   location.reload();
 }
 socket.on('clear',function(data){
-  if(data.id == id) location.reload();
+  if(data == id) location.reload();
 });
 socket.on('refresh',function(data){
   if(data.id == id){

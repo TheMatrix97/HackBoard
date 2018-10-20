@@ -28,10 +28,10 @@ io.on('connection', function (socket) {
     socket.on('clear',function(data){
       var aux = [];
       line_history.forEach(function(a){
-        if(a.id == data.id) aux.push(a);
+        if(a.id != data) aux.push(a);
       });
       line_history = aux;
-      socket.broadcast.emit('clear',data.id);
+      socket.broadcast.emit('clear',data);
     });
 });
 function create_sala(req){
